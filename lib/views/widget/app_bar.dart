@@ -1,5 +1,6 @@
 import 'package:bounce/bounce.dart';
 import 'package:sync_mobile/constants/app_colors.dart';
+import 'package:sync_mobile/constants/user_controller.dart';
 import 'package:sync_mobile/generated/assets.dart';
 import 'package:sync_mobile/views/screens/notifications/notifications.dart';
 import 'package:sync_mobile/views/widget/common_image_view_widget.dart';
@@ -111,8 +112,12 @@ class CustomAppBar extends StatefulWidget {
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
+  final UserController userController = Get.find<UserController>();
+
   @override
   Widget build(BuildContext context) {
+    final bool showMapToggleButton =
+        widget.showMapToggle && userController.userRole.value != 'engineer';
     return Container(
       padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 10),
       color: kWhite,
@@ -229,8 +234,33 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 imagePath: widget.searchIcon ?? Assets.imagesMynauiSearch,
                 height: 24,
               ),
+              // suffix:
+              //     widget.showMapToggle
+              //         ? Bounce(
+              //           onTap: widget.onMapToggleTap ?? () {},
+              //           child: Container(
+              //             padding: const EdgeInsets.symmetric(
+              //               vertical: 10,
+              //               horizontal: 20,
+              //             ),
+              //             decoration: BoxDecoration(
+              //               borderRadius: BorderRadius.circular(25),
+              //               color: kWhite,
+              //             ),
+              //             child: MyText(
+              //               text:
+              //                   widget.isMapView
+              //                       ? "Back to List"
+              //                       : "Explore on Map",
+              //               size: 12,
+              //               weight: FontWeight.w600,
+              //             ),
+              //           ),
+              //         )
+              //         : widget.customSearchSuffix, // This is the only new line!
+              // onChanged: widget.onSearchChanged ?? (_) => setState(() {}),
               suffix:
-                  widget.showMapToggle
+                  showMapToggleButton
                       ? Bounce(
                         onTap: widget.onMapToggleTap ?? () {},
                         child: Container(
@@ -252,7 +282,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                           ),
                         ),
                       )
-                      : widget.customSearchSuffix, // This is the only new line!
+                      : widget.customSearchSuffix,
               onChanged: widget.onSearchChanged ?? (_) => setState(() {}),
             ),
           ],
